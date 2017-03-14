@@ -1,0 +1,28 @@
+{
+  "name": "codebar-pairing-helper",
+  "version": "0.0.1",
+  "description": "A JS browser bookmarketlet to help codebar admins pair students",
+  "main": "pair.js",
+  "scripts": {
+    "start": "browser-sync start -s -f '**/*'",
+    "build": "node dev/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/richardwestenra/codebar-pairing-helper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/richardwestenra/codebar-pairing-helper/issues"
+  },
+  "homepage": "http://richardwestenra.com/codebar-pairing-helper/",
+  "author": {
+    "name": "Richard Westenra",
+    "email": "richard@richardwestenra.com",
+    "url": "http://richardwestenra.com/"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "bookmarklet": "0.0.6"
+  }
+}
