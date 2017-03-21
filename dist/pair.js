@@ -1,14 +1,6 @@
 $(function() {
   console.log('pair.js loaded');
 
-  function updateStore() {
-    localStorage.setItem(STORE_NAME, JSON.stringify(studentData));
-  }
-
-  function retrieveStore() {
-    studentData = JSON.parse(localStorage.getItem(STORE_NAME));
-  }
-
   class Row {
     constructor($row, i) {
       this.$row = $row;
@@ -31,9 +23,11 @@ $(function() {
       return $('<div/>').attr('class','fa fa-navicon sortable-handle')
     }
     updateHTML() {
-      this.$row.find('.small-1').prepend(this.handle());
-      this.$desc.find('span.has-tip').remove();
-      this.$subject.attr('contenteditable', 'true');
+      if (!this.$row.data('id')) {
+        this.$row.find('.small-1').prepend(this.handle());
+        this.$desc.find('span.has-tip').remove();
+        this.$subject.attr('contenteditable', 'true').before(' - ');
+      }
     }
     updateData() {
       if (!studentData[this.id]) {
@@ -42,6 +36,7 @@ $(function() {
         this.$subject.text(studentData[this.id].subject);
       }
       this.$row.data(studentData[this.id]);
+      this.$subject.data(studentData[this.id]);
     }
     getDatum() {
       const name = this.getName(),
@@ -55,8 +50,124 @@ $(function() {
     }
   }
 
+  function updateStore() {
+    localStorage.setItem(STORE_NAME, JSON.stringify(studentData));
+  }
+
+  function retrieveStore() {
+    studentData = JSON.parse(localStorage.getItem(STORE_NAME));
+  }
+
+  function clearStore() {
+    if (confirm('Are you sure you want to delete all student pairings?')) {
+      localStorage.removeItem(STORE_NAME);
+      studentData = {};
+    }
+  }
+
+  function initStudentHtml() {
+    $tbody.detach();
+    
+    // Format student rows and retrieve data
+    $row.each(function(i) {
+      const row = new Row($(this), i);
+      row.updateHTML();
+      row.updateData();
+      // subjects.push($(this).data('subject'));
+    });
+
+    if (localStorage[STORE_NAME]) {
+      $row.detach()
+        .sort((a,b) => {
+          return $(a).data('index') - $(b).data('index')
+        })
+        .appendTo($tbody);
+    }
+
+    // Update data when editing
+    $tbody.on('keydown', 'td.small-6 > small', function() {
+      const id = $(this).data('id');
+      studentData[id].subject = $(this).text();
+      // console.log(studentData[id].subject, subjectIndex(studentData[id].subject));
+      updateStore();
+    });
+
+    // Reattach to the DOM
+    $students.append($tbody);
+  }
+
+  function initControlPanel() {
+    const count = countAttendees();
+
+    if (!$('#pair-control-panel').length) {
+      var $controlPanel =  $('<div/>', {
+        id: 'pair-control-panel',
+        class: 'pair-control-panel'
+      });
+
+      $('<button/>')
+        .text('Reset form')
+        .on('click', clearStore)
+        .appendTo($controlPanel);
+
+      $('<button/>')
+        .text('Sort students')
+        .on('click', sortStudents)
+        .appendTo($controlPanel);
+
+      $controlPanel.append(`<ul class="attendee-count">
+        <li>Student attendees: <b id="student-count">${count.students}</b></li>
+        <li>Coach attendees: <b id="coach-count">${count.coaches}</b></li>
+      </ul>`);
+
+      $controlPanel.insertBefore($students);
+    } else {
+      $('#student-count').html(count.students);
+      $('#coach-count').html(count.coaches);
+    }
+  }
+
+  function subjectIndex(subject) {
+    const firstInstance = TUTORIAL_ORDER.find(order => 
+      !!subject.toLowerCase().match(order)
+    );
+    return TUTORIAL_ORDER.indexOf(firstInstance);
+  }
+
+  function sortStudents() {
+    $row.detach()
+      .sort((a,b) => {
+        return subjectIndex($(a).data('subject')) - subjectIndex($(a).data('subject'));
+      })
+      .appendTo($tbody);
+  }
+
+  function initSortable() {
+    var sortable = Sortable.create($tbody[0], {
+      draggable: '.attendee',
+      handle: '.sortable-handle',
+      onUpdate: function(e) {
+        $tbody.find('tr').each(function(i) {
+          var id = $(this).data('id');
+          studentData[id].index = i;
+          $(this).data('index', i);
+        });
+        updateStore();
+      }
+    });
+  }
+
+  function countAttendees() {
+    const students = $students.find('.fa-check-square-o').length;
+    const coaches = $('table.large-12.columns').eq(1).find('.fa-check-square-o').length;
+    return { students, coaches };
+  }
+
+
+  const TUTORIAL_ORDER = ['html','css','js','javascript','project','version control','command line','ruby','python','java','android','php','other'];
   var studentData = {};
-  const STORE_NAME = 'codebarOrgPairing';
+  const workshopID = window.location.pathname.match(/\d+/)[0];
+  const STORE_NAME = 'codebarOrgPairing' + workshopID;
 
   // Parse and alter the DOM.
   var $students = $('#attendances');
@@ -65,58 +176,13 @@ $(function() {
   var $row = $tbody.find('tr');
 
   // Retrieve data from the store
-  if (localStorage.codebarOrgPairing) {
+  if (localStorage[STORE_NAME]) {
     retrieveStore();
   }
 
-  // Get the details of each student
-  $row.each(function(i) {
-    const row = new Row($(this), i);
-    row.updateHTML();
-    row.updateData();
-  });
-
-  // If localStorage data exists then sort students by previous order
-  if (localStorage.codebarOrgPairing) {
-    $row.detach()
-      .sort((a,b) => $(a).data('index') - $(b).data('index'))
-      .appendTo($tbody);
-  } else {
-  }
-
-
-  // Update data when editing
-  $tbody.on('keydown', 'td.small-6 > small', function() {
-    const id = $(this).data('id');
-    studentData[id].subject = $(this).text();
-    updateStore();
-  });
-
-  // Reattach to the DOM
-  $students.append($tbody);
-
-  $('<button/>').text('Reset form')
-    .on('click', function() {
-      if (confirm('Are you sure you want to delete all student pairings?')) {
-        localStorage.removeItem(STORE_NAME);
-        window.location.reload();
-      }
-    })
-    .insertAfter($students);
-
-  // Update the store with new data
+  initStudentHtml();
+  initControlPanel();
   updateStore();
-
-  var sortable = Sortable.create($tbody[0], {
-    draggable: '.attendee',
-    handle: '.sortable-handle',
-    onUpdate: function(e) {
-        $tbody.find('tr').each(function(i) {
-        var id = $(this).data('id');
-        studentData[id].index = i;
-        $(this).data('index', i);
-      });
-      updateStore();
-    }
-  });
+  initSortable();
+  console.log(countAttendees());
 });
