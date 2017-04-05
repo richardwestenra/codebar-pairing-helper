@@ -4,6 +4,7 @@ $(function() {
   class Row {
     constructor($row, i) {
       this.$row = $row;
+      this.$checkbox = $row.find('.small-1').find('i');
       this.$name = $row.find('.small-5').find('a');
       this.$desc = $row.find('.small-6');
       this.$subject = this.$desc.children('small');
@@ -19,6 +20,9 @@ $(function() {
     getSubject() {
       return this.$subject.text();
     }
+    getAttendance() {
+      return this.$checkbox.hasClass('fa-check-square-o');
+    }
     handle() {
       return $('<div/>').attr('class','fa fa-navicon sortable-handle')
     }
@@ -30,11 +34,12 @@ $(function() {
       }
     }
     updateData() {
-      if (!studentData[this.id]) {
-        studentData[this.id] = this.getDatum();
+      if (studentData[this.id]) {
+        studentData[this.id].attending = this.getAttendance();
       } else {
-        this.$subject.text(studentData[this.id].subject);
+        studentData[this.id] = this.getDatum();
       }
+      this.$subject.text(studentData[this.id].subject);
       this.$row.data(studentData[this.id]);
       this.$subject.data(studentData[this.id]);
     }
@@ -42,6 +47,7 @@ $(function() {
       const name = this.getName(),
         subject = this.getSubject();
       return {
+        attending: this.getAttendance(),
         id: this.id,
         index: this.index,
         name,
@@ -88,7 +94,6 @@ $(function() {
     $tbody.on('keydown', 'td.small-6 > small', function() {
       const id = $(this).data('id');
       studentData[id].subject = $(this).text();
-      // console.log(studentData[id].subject, subjectIndex(studentData[id].subject));
       updateStore();
     });
 
@@ -105,15 +110,15 @@ $(function() {
         class: 'pair-control-panel'
       });
 
-      $('<button/>')
-        .text('Reset form')
-        .on('click', clearStore)
-        .appendTo($controlPanel);
-
-      $('<button/>')
-        .text('Sort students')
-        .on('click', sortStudents)
-        .appendTo($controlPanel);
+      const makeButton = (text, callback) => {
+        $('<button/>')
+          .text(text)
+          .on('click', callback)
+          .appendTo($controlPanel);
+      };
+      makeButton('Reset form', clearStore);
+      makeButton('Sort by attendance', sortStudents('attending'));
+      makeButton('Sort by subject', sortStudents('subject'));
 
       $controlPanel.append(`<ul class="attendee-count">
         <li>Student attendees: <b id="student-count">${count.students}</b></li>
@@ -134,11 +139,28 @@ $(function() {
     return TUTORIAL_ORDER.indexOf(firstInstance);
   }
 
-  function sortStudents() {
-    $row.detach()
-      .sort((a,b) => {
-        return subjectIndex($(a).data('subject')) - subjectIndex($(a).data('subject'));
-      })
+  function sortStudents(type) {
+    const getData = (a, b) => {
+      const d = x => $(x).data(type);
+      return { a: d(a), b: d(b) };
+    };
+
+    const sortBy = {
+      attending: (a, b) => {
+        const d = getData(a, b);
+        if (d.a === d.b) {
+          return 0;
+        }
+        return d.a ? -1 : 1;
+      },
+      subject: (a, b) => {
+        const d = getData(a, b);
+        return subjectIndex(d.a) - subjectIndex(d.b);
+      }
+    };
+
+    return () => $row.detach()
+      .sort(sortBy[type])
       .appendTo($tbody);
   }
 
