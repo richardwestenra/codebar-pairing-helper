@@ -184,7 +184,40 @@ $(function() {
   }
 
 
-  const TUTORIAL_ORDER = ['html','css','js','javascript','project','version control','command line','ruby','python','java','android','php','other'];
+  const TUTORIAL_ORDER = [
+    'i don\'t know, i\'m a complete beginner.',
+    'html 1: introducing html',
+    'html/css 2: introducing css',
+    'html/css 3: beyond the basics',
+    'html/css 4: css, layouts and formatting',
+    'html/css 5: dive into html5 &amp; css3',
+    'html/css 6: advanced html5',
+    'html/css/js project',
+    'html',
+    'css',
+    'js: introduction to javascript',
+    'js: beginning javascript',
+    'js: introduction to jquery',
+    'js: http requests, ajax and apis',
+    'js: http requests, ajax and apis (part 2)',
+    'js: drawing in canvas',
+    'js: introduction to testing',
+    'js: building your own app',
+    'javascript project',
+    'javascript',
+    'js',
+    'introduction to version control',
+    'command line',
+    'ruby: introduction to ruby',
+    'ruby: ruby basics',
+    'ruby: ruby basics (part 2)',
+    'ruby: object oriented ruby and inheritance',
+    'ruby',
+    'rails',
+    'python',
+    'java',
+    'other'
+  ];
   var studentData = {};
   const workshopID = window.location.pathname.match(/\d+/)[0];
   const STORE_NAME = 'codebarOrgPairing' + workshopID;
