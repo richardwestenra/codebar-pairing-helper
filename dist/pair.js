@@ -28,10 +28,15 @@ $(function() {
     getAttendance() {
       return this.$checkbox.hasClass('fa-check-square-o');
     }
+    getColour() {
+      const hue = subjectIndex(this.getSubject()) * 10;
+      return this.getAttendance() ? `hsl(${hue}, 100%, 93%)` : null;
+    }
     handle() {
       return $('<div/>').attr('class','fa fa-navicon sortable-handle')
     }
     updateHTML() {
+      this.$row.css('background-color', this.getColour());
       if (!this.$row.data('id')) {
         this.$row.find('.small-1').prepend(this.handle());
         this.$desc.find('span.has-tip').remove();
