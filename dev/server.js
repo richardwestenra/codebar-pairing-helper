@@ -1,7 +1,9 @@
 const bookmarklet = require('bookmarklet');
 
 const script = `if (window.location.protocol === "https:") {
-  alert("Scripts are likely blocked because this page is served over HTTPS. Try changing the protocol to HTTP?")
+  if (confirm("Scripts are likely blocked because this page is served over HTTPS. Change the protocol to HTTP?")) {
+    window.location.href = window.location.href.replace('https:','http:');
+  }
 } else {
   console.log("Let's pair!");
 }`;
