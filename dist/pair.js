@@ -1,6 +1,11 @@
 $(function() {
   console.log('pair.js loaded');
 
+  /**
+   * Individual student row class
+   * Prettifies HTML (removing unnecessary cruft and making it editable)
+   * and saves student data to a store object
+   */
   class Row {
     constructor($row, i) {
       this.$row = $row;
@@ -56,14 +61,23 @@ $(function() {
     }
   }
 
+  /**
+   * Copy student data to localStorage
+   */
   function updateStore() {
     localStorage.setItem(STORE_NAME, JSON.stringify(studentData));
   }
 
+  /**
+   * Retrieve student data from localStorage
+   */
   function retrieveStore() {
     studentData = JSON.parse(localStorage.getItem(STORE_NAME));
   }
 
+  /**
+   * Clear all student data in localStorage
+   */
   function clearStore() {
     if (confirm('Are you sure you want to delete all student pairings?')) {
       localStorage.removeItem(STORE_NAME);
@@ -71,7 +85,12 @@ $(function() {
     }
   }
 
+  /**
+   * Perform student row setup on page load:
+   * Format HTML, get data, sort rows, setup input event listeners, etc
+   */
   function initStudentHtml() {
+    // Detach from the DOM to improve performance
     $tbody.detach();
     
     // Format student rows and retrieve data
@@ -79,9 +98,9 @@ $(function() {
       const row = new Row($(this), i);
       row.updateHTML();
       row.updateData();
-      // subjects.push($(this).data('subject'));
     });
 
+    // Restore previous sort order if store data exists
     if (localStorage[STORE_NAME]) {
       $row.detach()
         .sort((a,b) => {
@@ -101,10 +120,14 @@ $(function() {
     $students.append($tbody);
   }
 
+  /**
+   * Setup the control panel HTML: Buttons, HUD, etc.
+   */
   function initControlPanel() {
     const count = countAttendees();
 
     if (!$('#pair-control-panel').length) {
+      // If it doesn't exist, create it:
       var $controlPanel =  $('<div/>', {
         id: 'pair-control-panel',
         class: 'pair-control-panel'
@@ -114,10 +137,11 @@ $(function() {
         .text(text)
         .on('click', callback)
         .appendTo($controlPanel);
-      makeButton('Reset form', clearStore);
+      makeButton('Reset', clearStore);
       makeButton('Sort students', sortStudents);
       makeButton('Copy list', copyToClipboard);
 
+      // Create attendance counters
       $controlPanel.append(`<ul class="attendee-count">
         <li>Student attendees: <b id="student-count">${count.students}</b></li>
         <li>Coach attendees: <b id="coach-count">${count.coaches}</b></li>
@@ -125,11 +149,17 @@ $(function() {
 
       $controlPanel.insertBefore($students);
     } else {
+      // If it already exists, update the counters
       $('#student-count').html(count.students);
       $('#coach-count').html(count.coaches);
     }
   }
 
+  /**
+   * Get the index (order) of a subject
+   * @param  {string} subject - The student's subject to match
+   * @return {number} The order of precedence for that subject
+   */
   function subjectIndex(subject) {
     const firstInstance = TUTORIAL_ORDER.find(order => 
       !!subject.toLowerCase().match(order)
@@ -137,6 +167,9 @@ $(function() {
     return TUTORIAL_ORDER.indexOf(firstInstance);
   }
 
+  /**
+   * Sort student rows by attendance (Boolean) and subject (string)
+   */
   function sortStudents() {
     const getData = (type) => x => $(x).data(type);
     const attending = getData('attending');
@@ -163,15 +196,23 @@ $(function() {
     updateDataIndexes();
   }
 
+  /**
+   * When rows have been reordered, recalculate their order indexes,
+   * and save this info to the studentData object and update localStorage
+   */
   function updateDataIndexes() {
     $tbody.find('tr').each(function(i) {
-      var id = $(this).data('id');
+      const id = $(this).data('id');
       studentData[id].index = i;
       $(this).data('index', i);
     });
+
     updateStore();
   }
 
+  /**
+   * Copy the list of students to the clipboard
+   */
   function copyToClipboard() {
     // Select text of students column
     const range = document.createRange();
@@ -192,14 +233,21 @@ $(function() {
     window.setTimeout(() => $(this).text(buttonText), 3333);
   }
 
+  /**
+   * Initialise Sortable, the third-party drag-and-drop functionality
+   */
   function initSortable() {
-    var sortable = Sortable.create($tbody[0], {
+    Sortable.create($tbody[0], {
       draggable: '.attendee',
       handle: '.sortable-handle',
       onUpdate: updateDataIndexes
     });
   }
 
+  /**
+   * Count the number of students and coaches who have been signed in
+   * @return {object} The number of attending students & coaches
+   */
   function countAttendees() {
     const students = $students.find('.fa-check-square-o').length;
     const coaches = $('table.large-12.columns').eq(1).find('.fa-check-square-o').length;
@@ -207,6 +255,9 @@ $(function() {
   }
 
 
+  /**
+   * Declare global variables
+   */
   const TUTORIAL_ORDER = [
     'i don\'t know, i\'m a complete beginner.',
     'html 1: introducing html',
@@ -251,14 +302,15 @@ $(function() {
   var $tbody = $students.find('tbody').detach();
   var $row = $tbody.find('tr');
 
-  // Retrieve data from the store
+
+  /**
+   * Initialise application
+   */
   if (localStorage[STORE_NAME]) {
     retrieveStore();
   }
-
   initStudentHtml();
   initControlPanel();
   updateStore();
   initSortable();
-  console.log(countAttendees());
 });
