@@ -117,8 +117,7 @@ $(function() {
           .appendTo($controlPanel);
       };
       makeButton('Reset form', clearStore);
-      makeButton('Sort by attendance', sortStudents('attending'));
-      makeButton('Sort by subject', sortStudents('subject'));
+      makeButton('Sort students', sortStudents);
 
       $controlPanel.append(`<ul class="attendee-count">
         <li>Student attendees: <b id="student-count">${count.students}</b></li>
@@ -139,28 +138,27 @@ $(function() {
     return TUTORIAL_ORDER.indexOf(firstInstance);
   }
 
-  function sortStudents(type) {
-    const getData = (a, b) => {
-      const d = x => $(x).data(type);
-      return { a: d(a), b: d(b) };
-    };
+  function sortStudents() {
+    const getData = (type) => x => $(x).data(type);
+    const attending = getData('attending');
+    const subject = getData('subject');
+    const subjInd = x => subjectIndex( subject(x) );
 
-    const sortBy = {
-      attending: (a, b) => {
-        const d = getData(a, b);
-        if (d.a === d.b) {
-          return 0;
-        }
-        return d.a ? -1 : 1;
-      },
-      subject: (a, b) => {
-        const d = getData(a, b);
-        return subjectIndex(d.a) - subjectIndex(d.b);
+    const sortBy = (a, b) => {
+      // Sort by attendance
+      if (attending(a) !== attending(b)) {
+        return attending(a) ? -1 : 1;
+      // Secondarily sort by subject index
+      } else if (subjInd(a) !== subjInd(b)) {
+        return subjInd(a) - subjInd(b);
+      // Thirdly sort by subject alphabetically
+      } else {
+        return subject(a) < subject(b) ? -1 : 1;
       }
     };
 
-    return () => $row.detach()
-      .sort(sortBy[type])
+    return $row.detach()
+      .sort(sortBy)
       .appendTo($tbody);
   }
 
