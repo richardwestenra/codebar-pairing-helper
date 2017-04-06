@@ -182,10 +182,10 @@ $(function() {
         return attending(a) ? -1 : 1;
       // Secondarily sort by subject index
       } else if (subjInd(a) !== subjInd(b)) {
-        return subjInd(a) - subjInd(b);
+        return subjInd(b) - subjInd(a);
       // Thirdly sort by subject alphabetically
       } else {
-        return subject(a) < subject(b) ? -1 : 1;
+        return subject(b) < subject(a) ? -1 : 1;
       }
     };
 
