@@ -10,6 +10,20 @@
     <p>Drag the following bookmarklet link to your bookmarks:</p>
     <a class="btn" href="javascript:(function()%7Bvar%20link%3Ddocument.createElement(%22link%22)%3Blink.rel%3D%22stylesheet%22%2Clink.href%3D%22http%3A%2F%2Frichardwestenra.com%2Fcodebar-pairing-helper%2Fdist%2Fpair.css%22%2Cdocument.body.appendChild(link)%3Bfunction%20callback()%7Bfunction%20e()%7B%22https%3A%22%3D%3D%3Dwindow.location.protocol%3Fconfirm(%22Scripts%20are%20likely%20blocked%20because%20this%20page%20is%20served%20over%20HTTPS.%20Change%20the%20protocol%20to%20HTTP%3F%22)%26%26(window.location.href%3Dwindow.location.href.replace(%22https%3A%22%2C%22http%3A%22))%3Aconsole.log(%22Let's%20pair!%22)%7Dvar%20t%3Ddocument.createElement(%22script%22)%3Bt.addEventListener%3Ft.addEventListener(%22load%22%2Ce%2C!1)%3At.readyState%26%26(t.onreadystatechange%3De)%2Ct.src%3D%22http%3A%2F%2Frichardwestenra.com%2Fcodebar-pairing-helper%2Fdist%2Fpair.js%22%2Cdocument.body.appendChild(t)%7Dvar%20s%3Ddocument.createElement(%22script%22)%3Bs.addEventListener%3Fs.addEventListener(%22load%22%2Ccallback%2C!1)%3As.readyState%26%26(s.onreadystatechange%3Dcallback)%2Cs.src%3D%22http%3A%2F%2Frichardwestenra.com%2Fcodebar-pairing-helper%2Fdist%2Fsortable.min.js%22%2Cdocument.body.appendChild(s)%3B%7D)()">Pair codebar students</a>
     <p>When pairing students at a codebar meet, click the link in your bookmarks to enable some additional pairing functionality.</p>
+    <div class="features">
+      <h2>Features</h2>
+      <ul>
+        <li class="feature feature--yes">Automatically sort students by attendance and subject</li>
+        <li class="feature feature--yes">Drag and drop students to reorder manually</li>
+        <li class="feature feature--yes">Edit a student's subject text inline</li>
+        <li class="feature feature--yes">Copy list of student attendees to clipboard, to easily migrate to your text-editor if desired</li>
+        <li class="feature feature--yes">Any changes are saved to localStorage, so they'll persist when refreshing</li>
+        <li class="feature feature--no">Needs to be restarted every time you sign in a student (due to the page refresh)</li>
+        <li class="feature feature--no">Has only been tested in Chrome on desktop</li>
+      </ul>
+    </div>
+
+    <p><a href="https://github.com/richardwestenra/codebar-pairing-helper">Github contributions welcome</a></p>
     
     <small>(For local development, use this link instead: <a href="javascript:(function()%7Bvar%20link%3Ddocument.createElement(%22link%22)%3Blink.rel%3D%22stylesheet%22%2Clink.href%3D%22http%3A%2F%2Flocalhost%3A3000%2Fdist%2Fpair.css%22%2Cdocument.body.appendChild(link)%3Bfunction%20callback()%7Bfunction%20e()%7B%22https%3A%22%3D%3D%3Dwindow.location.protocol%3Fconfirm(%22Scripts%20are%20likely%20blocked%20because%20this%20page%20is%20served%20over%20HTTPS.%20Change%20the%20protocol%20to%20HTTP%3F%22)%26%26(window.location.href%3Dwindow.location.href.replace(%22https%3A%22%2C%22http%3A%22))%3Aconsole.log(%22Let's%20pair!%22)%7Dvar%20t%3Ddocument.createElement(%22script%22)%3Bt.addEventListener%3Ft.addEventListener(%22load%22%2Ce%2C!1)%3At.readyState%26%26(t.onreadystatechange%3De)%2Ct.src%3D%22http%3A%2F%2Flocalhost%3A3000%2Fdist%2Fpair.js%22%2Cdocument.body.appendChild(t)%7Dvar%20s%3Ddocument.createElement(%22script%22)%3Bs.addEventListener%3Fs.addEventListener(%22load%22%2Ccallback%2C!1)%3As.readyState%26%26(s.onreadystatechange%3Dcallback)%2Cs.src%3D%22http%3A%2F%2Flocalhost%3A3000%2Fdist%2Fsortable.min.js%22%2Cdocument.body.appendChild(s)%3B%7D)()">Pair codebar students</a>)</small>
   </div>
