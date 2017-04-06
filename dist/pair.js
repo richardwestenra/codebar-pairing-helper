@@ -110,14 +110,13 @@ $(function() {
         class: 'pair-control-panel'
       });
 
-      const makeButton = (text, callback) => {
-        $('<button/>')
-          .text(text)
-          .on('click', callback)
-          .appendTo($controlPanel);
-      };
+      const makeButton = (text, callback) => $('<button/>')
+        .text(text)
+        .on('click', callback)
+        .appendTo($controlPanel);
       makeButton('Reset form', clearStore);
       makeButton('Sort students', sortStudents);
+      makeButton('Copy list', copyToClipboard);
 
       $controlPanel.append(`<ul class="attendee-count">
         <li>Student attendees: <b id="student-count">${count.students}</b></li>
@@ -171,6 +170,26 @@ $(function() {
       $(this).data('index', i);
     });
     updateStore();
+  }
+
+  function copyToClipboard() {
+    // Select text of students column
+    const range = document.createRange();
+    range.selectNodeContents($students.get(0));
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    // Copy to clipboard
+    document.execCommand('copy', true, null);
+
+    // Deselect text again
+    selection.removeAllRanges();
+
+    // Display a brief message to user
+    const buttonText = $(this).text();
+    $(this).text('Copied!');
+    window.setTimeout(() => $(this).text(buttonText), 3333);
   }
 
   function initSortable() {
