@@ -24,3 +24,8 @@
 .attendee-count b {
   font-size: 1.4rem;
 }
+/* Remove whitespace next to icons, to make copying text easier */
+.attendee .has-tip {
+  float: left;
+  margin-right: 0.2em;
+}
