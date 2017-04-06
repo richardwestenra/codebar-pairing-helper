@@ -35,7 +35,7 @@ body {
   padding-left: 30px;
 }
 .feature {
-  margin: 5px 0;
+  margin: 10px 0;
   list-style: none;
   position: relative;
 }
@@ -52,4 +52,7 @@ body {
 }
 .feature--no:before {
   content: '❌';
+}
+.feature--maybe:before {
+  content: '❓';
 }
