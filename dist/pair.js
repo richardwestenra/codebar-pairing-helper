@@ -157,23 +157,27 @@ $(function() {
       }
     };
 
-    return $row.detach()
+    $row.detach()
       .sort(sortBy)
       .appendTo($tbody);
+
+    updateDataIndexes();
+  }
+
+  function updateDataIndexes() {
+    $tbody.find('tr').each(function(i) {
+      var id = $(this).data('id');
+      studentData[id].index = i;
+      $(this).data('index', i);
+    });
+    updateStore();
   }
 
   function initSortable() {
     var sortable = Sortable.create($tbody[0], {
       draggable: '.attendee',
       handle: '.sortable-handle',
-      onUpdate: function(e) {
-        $tbody.find('tr').each(function(i) {
-          var id = $(this).data('id');
-          studentData[id].index = i;
-          $(this).data('index', i);
-        });
-        updateStore();
-      }
+      onUpdate: updateDataIndexes
     });
   }
 
