@@ -115,7 +115,7 @@ $(function() {
     }
 
     // Update data when editing
-    $tbody.on('keydown', 'td.small-6 > small', function() {
+    $tbody.on('keyup', 'td.small-6 > small', function() {
       const id = $(this).data('id');
       studentData[id].subject = $(this).text();
       updateStore();
