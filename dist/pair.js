@@ -169,6 +169,12 @@ $(function() {
     const firstInstance = TUTORIAL_ORDER.find(order => 
       !!subject.toLowerCase().match(order)
     );
+
+    // Push unknown subjects to the top of the list
+    if (!firstInstance) {
+      return TUTORIAL_ORDER.length;
+    }
+
     return TUTORIAL_ORDER.indexOf(firstInstance);
   }
 
@@ -265,13 +271,12 @@ $(function() {
    */
   const TUTORIAL_ORDER = [
     'i don\'t know, i\'m a complete beginner.',
-    'html 1: introducing html',
-    'html/css 2: introducing css',
-    'html/css 3: beyond the basics',
-    'html/css 4: css, layouts and formatting',
-    'html/css 5: dive into html5 &amp; css3',
-    'html/css 6: advanced html5',
-    'html/css/js project',
+    'html 1',
+    'html/css 2',
+    'html/css 3',
+    'html/css 4',
+    'html/css 5',
+    'html/css 6',
     'html',
     'css',
     'js: introduction to javascript',
@@ -285,11 +290,10 @@ $(function() {
     'javascript project',
     'javascript',
     'js',
-    'introduction to version control',
+    'version control',
     'command line',
     'ruby: introduction to ruby',
     'ruby: ruby basics',
-    'ruby: ruby basics (part 2)',
     'ruby: object oriented ruby and inheritance',
     'ruby',
     'rails',
