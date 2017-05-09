@@ -261,7 +261,7 @@ $(function() {
    */
   function countAttendees() {
     const students = $students.find('.fa-check-square-o').length;
-    const coaches = $('table.large-12.columns').eq(1).find('.fa-check-square-o').length;
+    const coaches = $coaches.find('.fa-check-square-o').length;
     return { students, coaches };
   }
 
@@ -310,6 +310,15 @@ $(function() {
   // Detach students from the DOM to improve performance
   var $tbody = $students.find('tbody').detach();
   var $row = $tbody.find('tr');
+  var $coaches = $('table.large-12.columns').filter(function() {
+    // This is why you use IDs & classes properly, kids 🙄
+    return $(this).parent()
+      .prev()
+      .find('h4')
+      .text()
+      .match('Coaches');
+  });
+
 
 
   /**
