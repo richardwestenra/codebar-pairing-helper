@@ -320,41 +320,39 @@ $(function() {
   });
 
   // Append styles
-  $('body').append(
-    `<style>
-      .attendee .small-1 {
-        position: relative;
-      }
-      .attendee .fa-navicon {
-        position: absolute;
-        left: -22px;
-        cursor: move;
-        cursor: -webkit-grab;
-      }
-      .attendee .fa-navicon:active {
-        cursor: -webkit-grabbing;
-      }
-      .sortable-chosen {
-        background: lemonchiffon;
-      }
-      .pair-control-panel button {
-        padding: 0.2rem 0.5rem;
-        margin-right: 1rem;
-      }
-      .attendee-count {
-        list-style: none;
-        margin-left: 0;
-      }
-      .attendee-count b {
-        font-size: 1.4rem;
-      }
-      /* Remove whitespace next to icons, to make copying text easier */
-      .attendee .has-tip {
-        float: left;
-        margin-right: 0.2em;
-      }
-    </style>`
-  );
+  $('body').append( $('<style/>').html(
+    `.attendee .small-1 {
+      position: relative;
+    }
+    .attendee .fa-navicon {
+      position: absolute;
+      left: -22px;
+      cursor: move;
+      cursor: -webkit-grab;
+    }
+    .attendee .fa-navicon:active {
+      cursor: -webkit-grabbing;
+    }
+    .sortable-chosen {
+      background: lemonchiffon;
+    }
+    .pair-control-panel button {
+      padding: 0.2rem 0.5rem;
+      margin-right: 1rem;
+    }
+    .attendee-count {
+      list-style: none;
+      margin-left: 0;
+    }
+    .attendee-count b {
+      font-size: 1.4rem;
+    }
+    /* Remove whitespace next to icons, to make copying text easier */
+    .attendee .has-tip {
+      float: left;
+      margin-right: 0.2em;
+    }`
+  ));
 
 
 
