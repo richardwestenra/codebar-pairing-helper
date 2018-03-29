@@ -320,7 +320,7 @@ $(function() {
   });
 
   // Append styles
-  $('body').append( $('<style/>').html(
+  $('head').append( $('<style/>').html(
     `.attendee .small-1 {
       position: relative;
     }
