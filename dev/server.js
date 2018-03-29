@@ -11,9 +11,6 @@ const script = `if (window.location.protocol === "http:") {
 const makeBookmarklet = (domain) => bookmarklet.convert(
   script,
   {
-    style: [
-      `${domain}/dist/pair.css`
-    ],
     script: [
       `${domain}/dist/sortable.min.js`,
       `${domain}/dist/pair.js`
