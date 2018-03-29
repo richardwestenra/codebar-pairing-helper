@@ -1,6 +1,6 @@
 {
   "name": "codebar-pairing-helper",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A JS browser bookmarketlet to help codebar admins pair students",
   "main": "pair.js",
   "scripts": {
@@ -15,7 +15,7 @@
   "bugs": {
     "url": "https://github.com/richardwestenra/codebar-pairing-helper/issues"
   },
-  "homepage": "http://richardwestenra.com/codebar-pairing-helper/",
+  "homepage": "https://richardwestenra.com/codebar-pairing-helper/",
   "author": {
     "name": "Richard Westenra",
     "email": "richard@richardwestenra.com",
